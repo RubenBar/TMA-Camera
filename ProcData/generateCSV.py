@@ -46,7 +46,7 @@ def generateCSV(list_files, camera_ip):
     csv_path = 'csv/'
     
     #COLUMNAS
-    d_f = datafile(list_files[0], camera_ip) 
+    d_f = datafile(list_files[0], camera_ip, 'standard') 
     df_cols = dataframe_columns(d_f)
     df_csv = pd.DataFrame(columns=df_cols)
 
@@ -55,7 +55,7 @@ def generateCSV(list_files, camera_ip):
     for f in list_files:
         print("Num: ", count,"/",len(list_files))
         try:	
-            d_f = datafile(f, camera_ip) 
+            d_f = datafile(f, camera_ip, 'standard') 
                     
             label = 0 #0: No-Movimiento // 1: Movimiento        
             d_f.insert(0, label)
