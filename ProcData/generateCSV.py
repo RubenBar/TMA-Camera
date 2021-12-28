@@ -57,7 +57,7 @@ def generateCSV(list_files, camera_ip):
         try:	
             d_f = datafile(f, camera_ip, 'standard') 
                     
-            label = 0 #0: No-Movimiento // 1: Movimiento        
+            label = 1 #0: No-Movimiento // 1: Movimiento        
             d_f.insert(0, label)
             
             query_name = getFilename(f)

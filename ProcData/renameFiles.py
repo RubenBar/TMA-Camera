@@ -4,7 +4,7 @@ import shutil
 
 def rename_files(list_files, path, name):
         #Renombra los ficheros: command.index.pcap
-        index = 0
+        index =0
         for file in list_files:
             os.rename(file, path+name+"."+str(index)+".pcap")
             index = index + 1
