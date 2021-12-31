@@ -2,7 +2,7 @@
 import os.path
 import sys
 import subprocess
-
+from ProcData import generateCSV, obtainData
 
 def capture(device_ip, duration, dir, captureName):
     capture = subprocess.Popen("sudo timeout " + str(duration) + " tcpdump -i wlan0 -n host " + str(
@@ -11,7 +11,7 @@ def capture(device_ip, duration, dir, captureName):
 
 def monitoring(ip, interval, dir):
     # Start the capture.
-    capture(ip, interval, dir, 'test')
+    #capture(ip, interval, dir, 'test')
     # Process the captured data
     # TODO: Here we need to process the data in a way that the model understands it, \
     #  the first approach was to generate the csv and then read csv etc. However, we think \
@@ -19,6 +19,13 @@ def monitoring(ip, interval, dir):
     #  and storing it directly as the expected format. \
     #  Would need to take a look at the code to do this. So I Write a commentary :)
 
+    #Autocreate a list with my directory name.
+    list_dir = generateCSV.list_queries(dir)
+    list_files = []
+    files = generateCSV.list_files(dir)
+    list_files.extend(files)
+    print("Files in directory: ", list_files)
+    generateCSV.generateCSV(list_files, ip)
     # Load the model
 
     # Obtain Classification

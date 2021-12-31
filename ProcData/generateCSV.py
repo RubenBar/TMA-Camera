@@ -2,7 +2,7 @@ import sys
 import os
 import pandas as pd
 from scapy.all import *
-from obtainData import datafile
+from ProcData.obtainData import datafile
 
 def list_queries(path):
     #Lista todas las preguntas del directorio "path"
