@@ -1,0 +1,23 @@
+model:
+    type: "mlp"
+    generator:
+        input_dim:
+        output_dim:         
+        dropout1: 0.1
+        l1_units: 1024
+        dropout2: 0.1
+        l2_units: 512 
+        learning_rate: 0.01
+        loss_function: "categorical_crossentropy"
+    trainer:
+        val_split: 0.1    
+        batch_size: 100
+        epochs: 100
+        verbose: 1
+dataset:
+    loader:
+        path: "data/data.csv"
+        traffic_direction: "standard"
+        parameters: "tcptrace"
+        
+     

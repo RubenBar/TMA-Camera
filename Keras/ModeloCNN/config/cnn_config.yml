@@ -1,0 +1,29 @@
+model:
+    type: "cnn"
+    generator:
+        input_dim:
+        output_dim:         
+        dropout: 0.2     
+        l1_filt: 128
+        l1_kernel: 9
+        l1_psize: 1
+        l2_filt: 256
+        l2_kernel: 15
+        l2_psize: 1
+        learning_rate: 0.0001
+        loss_function: "categorical_crossentropy"
+    trainer:
+        val_split: 0.3        
+        batch_size: 150
+        epochs: 10
+        verbose: 1
+dataset:
+    loader:
+        path: "data/datav2.csv"
+        traffic_direction: "standard"
+        parameters: "all"
+        
+        
+
+        
+        
