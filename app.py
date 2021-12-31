@@ -2,7 +2,15 @@
 import os.path
 import sys
 import subprocess
+import argparse
 from ProcData import generateCSV, obtainData
+
+from Keras.ModeloMLP.models.mlp_model import MLP_Model
+from Keras.ModeloMLP.utils import config as MLP_config
+
+def load_MLP_config():
+    argparser = argparse.ArgumentParser()
+
 
 def capture(device_ip, duration, dir, captureName):
     capture = subprocess.Popen("sudo timeout " + str(duration) + " tcpdump -i wlan0 -n host " + str(
@@ -20,15 +28,24 @@ def monitoring(ip, interval, dir):
     #  Would need to take a look at the code to do this. So I Write a commentary :)
 
     #Autocreate a list with my directory name.
+    ''''
     list_dir = generateCSV.list_queries(dir)
     list_files = []
     files = generateCSV.list_files(dir)
     list_files.extend(files)
     print("Files in directory: ", list_files)
     generateCSV.generateCSV(list_files, ip)
+    '''
     # Load the model
+    config = MLP_config.process_config('Keras/ModeloMLP/config/mlp_config.yml')
+    model = MLP_Model(config)
+    model.load()
 
     # Obtain Classification
+    # Assuming we have the data in an array of samples.
+    samples=[]
+    labels=[] # This should be void or all to 0, does not matter.
+    prediction = model.predict(samples, labels)
 
     # Show the results
     # TODO: Here the idea is to show the results. \
