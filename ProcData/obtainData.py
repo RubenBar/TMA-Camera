@@ -4,7 +4,7 @@ import pandas as pd
 from scapy.all import *
 
 def pcap_converter(pcap_path, echo_ip):
-    l_server_ip = ["8.211.20.145"]
+    l_server_ip = ["8.211.20.145", "192.168.1.41", "192.168.1.62"]
     csv_path = 'csv/'
     pcap_file = Path(pcap_path)
     pcap_name = pcap_file.name[0:-5]
@@ -19,14 +19,14 @@ def pcap_converter(pcap_path, echo_ip):
     p_list.reverse()
     echo_packets = []
     for p in p_list:
-	 #En este apartado eliminamos los paquetes que no queremos mostrar en el CSV -> en este caso, todos los paquetes ACK.
-         try:
+	    #En este apartado eliminamos los paquetes que no queremos mostrar en el CSV -> en este caso, todos los paquetes TCP.
+        try:
             p[IP].src
-            p[TCP]
-         except:
+            p[UDP]
+        except:
             continue
-         if (p[IP].src.strip() == echo_ip.strip() or p[IP].dst.strip() == echo_ip.strip()) and (p[IP].src.strip() in l_server_ip or p[IP].dst.strip() in l_server_ip):
-            if p[TCP] and p.len < 60: #filter ACk packets
+        if (p[IP].src.strip() == echo_ip.strip() or p[IP].dst.strip() == echo_ip.strip()) and (p[IP].src.strip() in l_server_ip or p[IP].dst.strip() in l_server_ip):
+            if p[UDP] and p.len < 60: #filter low size packets
                 continue
             else:
                 echo_packets.append(p)
@@ -69,7 +69,7 @@ def traffic_direction(f_features, direction):
     
 def equal_lists(f_features, direction):
     if direction == 'standard':
-        f_features.extend([0] * (50 - len(f_features)))
+        f_features.extend([0] * (1000 - len(f_features)))
     return f_features
 
 
@@ -100,7 +100,7 @@ def datafile_main():
 	f_features = f_size*f_direction
 	list_features_pcap = traffic_direction(f_features, 'standard')
 	list_features_pcap = equal_lists(list_features_pcap, 'standard')
-	print('PCAP: ',list_features_pcap)
+	print('PCAP: ',len(list_features_pcap))
 
 if __name__ == "__main__":
 		datafile_main()  

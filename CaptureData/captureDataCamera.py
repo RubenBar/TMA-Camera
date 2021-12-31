@@ -18,10 +18,10 @@ def generateDirectory():
         now = datetime.now()
         dt_str = now.strftime("%d%m%Y-%H%M%S")
         
-	path_dir = 'pcap/' + dt_str
-	if not os.path.exists(path_dir):
-		os.mkdir(path_dir)
-	return path_dir + '/'
+        path_dir = 'pcap/' + dt_str
+        if not os.path.exists(path_dir):
+                os.mkdir(path_dir)
+        return path_dir + '/'
 
 
 def main():
@@ -39,7 +39,7 @@ def main():
         #mov: movimiento (1) sin movimiento (0)
         '''
         if len(sys.argv) < 4:
-                print "Usage: captureDataCamera.py <camera_ip> <itr> <time> <mov>"
+                print("Usage: captureDataCamera.py <camera_ip> <itr> <time> <mov>")
                 return 1
                 
         #Variables        
