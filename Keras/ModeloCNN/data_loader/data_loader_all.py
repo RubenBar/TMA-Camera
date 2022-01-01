@@ -7,32 +7,20 @@ from sklearn.preprocessing import MinMaxScaler
 class Data_Loader():   
     def __init__(self, config):
         self.config = config
-        self.data_size = []
-        self.data_time = []
+        self.data = []
         self.load_data() 
+    
     
     def load_data(self):   
         #Obtener lista de ficheros
-        #self.data_size = pd.read_csv(self.config.dataset.loader.path_size, sep=',', skiprows=0)
-        self.data_time = pd.read_csv(self.config.dataset.loader.path, sep=',', skiprows=0)
+        self.data = pd.read_csv(self.config.dataset.loader.path, sep=',', skiprows=0)
+        
         
     def get_samples(self):
-        #samples_size =  self.get_samples_size() 
-        samples_time =  self.get_samples_time()
-        
-        samples = np.array(samples_time)         
+        samples = self.data.iloc[:, 2:450].values.tolist()        
+        samples = np.array(samples)         
         return samples        
-             
-        
-    def get_samples_size(self):
-        samples = self.data_size.iloc[:, 2:450].values.tolist()
-        return samples
-    
-    
-    def get_samples_time(self):
-        samples = self.data_time.iloc[:, 2:450].values.tolist()
-        return samples
-        
+
     
     def process_data(self, t_samples, t_labels, model):
         train_samples = np.array(t_samples)        
@@ -64,13 +52,13 @@ class Data_Loader():
     
     
     def get_labels(self):   
-        labels = self.data_time['label'].tolist() 
+        labels = self.data['label'].tolist() 
         numLabels = self.count_Labels(labels)
         return labels, numLabels
     
     
     def get_queries(self):   
-        queries = self.data_time['query'].tolist() 
+        queries = self.data['query'].tolist() 
         dic = []
         dic_num = []
         index = 0
