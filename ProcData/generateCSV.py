@@ -4,29 +4,29 @@ import pandas as pd
 from scapy.all import *
 from obtainData import datafile
 
-def list_queries(path):
-    #Lista todas las preguntas del directorio "path"
-    list_queries = os.listdir(path)
-    list_queries.sort()
-    list_q = []
-    for q in list_queries:
-        query_path = os.path.join(path,q) + "/"
-        list_q.append(query_path)	
-    return list_q
+def list_dirs(path):
+    #Lista todos los directorios del directorio main "path"
+    list_dirs = os.listdir(path)
+    list_dirs.sort()
+    list_d = []
+    for q in list_dirs:
+        subdir_path = os.path.join(path,q) + "/"
+        list_d.append(subdir_path)	
+    return list_d
 
 
-def list_files(query_path):
-    #Lista todos los ficheros del directorio "query_path"
+def list_files(subdir_path):
+    #Lista todos los ficheros del directorio "subdir_path"
     list_files = []
-    q_files = os.listdir(query_path)
-    list_files.extend(map(lambda f: os.path.join(query_path, f), q_files))	
+    pcap_files = os.listdir(subdir_path)
+    list_files.extend(map(lambda f: os.path.join(subdir_path, f), pcap_files))	
     return list_files
     
    
 def dataframe_columns(d_f):
     #Obtener las columnas 
     col = []
-    col.append('query')
+    col.append('name')
     col.append('label')
     length_paq = len(d_f)
     for ind in range(length_paq):
@@ -42,7 +42,7 @@ def getFilename(f):
       
       
 def generateCSV(list_files, camera_ip):
-    #Extraer caracteristicas y generar Cfichero SV 
+    #Extraer caracteristicas y generar fichero CSV 
     csv_path = 'csv/'
     
     #COLUMNAS
@@ -53,16 +53,19 @@ def generateCSV(list_files, camera_ip):
     #FILAS   
     count = 1
     for f in list_files:
+        #Iterar por todas las capturas de trafico
         print("Num: ", count,"/",len(list_files))
         try:	
+            #Obtener los datos -> llamada a obtainData
             d_f = datafile(f, camera_ip, 'standard') 
                     
             label = 1 #0: No-Movimiento // 1: Movimiento        
             d_f.insert(0, label)
             
-            query_name = getFilename(f)
-            d_f.insert(0, query_name)
+            file_name = getFilename(f)
+            d_f.insert(0, file_name)
             try:
+                #Insertar los datos en el CSV
                 df_csv.loc[-1] = d_f
                 df_csv.index = df_csv.index + 1
                 count = count + 1 
@@ -83,17 +86,18 @@ def main():
     
 	'''
 	~Argumentos de entrada~
-	#main_path: dpath del CSV con el listado de comandos de voz. 
-	#camera_ip: direccion IP dispositivo Amazon Echo
+	#main_path: path con las capturas de trafico  
+	#camera_ip: direccion IP dispositivo
 	'''
     
 	main_path = sys.argv[1]
 	camera_ip = sys.argv[2]
 	
 	print('\nListando directorios...')
-	l_q = list_queries(main_path)
+	l_q = list_dirs(main_path)
 	print('Lista de directorios: ', l_q)
 
+	print('\nListando ficheros...')
 	l_f = []
 	for q in l_q:
 		l_f.extend(list_files(q))
