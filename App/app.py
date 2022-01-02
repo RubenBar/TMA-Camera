@@ -4,6 +4,7 @@ import sys
 import subprocess
 import argparse
 from ProcData import generateCSV, obtainData
+from itertools import cycle
 
 from Keras.ModeloMLP.models.mlp_model import MLP_Model
 from Keras.ModeloMLP.utils import config as MLP_config
@@ -37,12 +38,22 @@ def monitoring(ip, interval, dir):
     samples.append(data_packets[:648])
     prediction = model.predict(samples, labels)
 
-    # Show the results
-    # TODO: Here the idea is to show the results. \
-    #  We talked about storing the 5 past results in a list and then output based on them. \
-    #  I'll leave this until I have the current results etc.
-    predictions=[]
-    predictions.extend(prediction)
+    prediction_list = [-1] * 5
+    predictions = cycle(prediction_list)
+
+    #Iterate the list and see if there is more mov or nomov.
+    mov = 0
+    nomov = 0
+    for p in prediction_list:
+        if p != -1:
+            if p == 1:
+                mov += 1
+            else:
+                nomov += 1
+    if mov > nomov:
+        print("There is movement")
+    else:
+        print("No movement detected")
 
     # TODO: The idea is to have this as a realtime so we would put everything \
     #  In an infinite loop and that's it... \
