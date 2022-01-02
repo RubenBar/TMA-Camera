@@ -9,7 +9,10 @@ class MLP_Model():
     def __init__(self, config):
         self.config = config
         self.build_model()
-        
+
+    def __init__(self):
+        pass
+
     def generate_model(self):
         model = Sequential()
         

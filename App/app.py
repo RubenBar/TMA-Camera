@@ -5,8 +5,8 @@ import subprocess
 import argparse
 from ProcData import generateCSV, obtainData
 
-from models.mlp_model import MLP_Model
-from utils import config as MLP_config
+from Keras.ModeloMLP.models.mlp_model import MLP_Model
+from Keras.ModeloMLP.utils import config as MLP_config
 
 def load_MLP_config():
     argparser = argparse.ArgumentParser()
@@ -20,6 +20,7 @@ def capture(device_ip, duration, dir, captureName):
 def monitoring(ip, interval, dir):
     # Start the capture.
     #capture(ip, interval, dir, 'test')
+
     # Process the captured data
     # TODO: Here we need to process the data in a way that the model understands it, \
     #  the first approach was to generate the csv and then read csv etc. However, we think \
@@ -28,17 +29,16 @@ def monitoring(ip, interval, dir):
     #  Would need to take a look at the code to do this. So I Write a commentary :)
 
     #Autocreate a list with my directory name.
-    ''''
-    list_dir = generateCSV.list_queries(dir)
-    list_files = []
-    files = generateCSV.list_files(dir)
+    '''
+    list_files=[]
+    files = generateCSV.list_files(dir+"/mov/")
     list_files.extend(files)
     print("Files in directory: ", list_files)
     generateCSV.generateCSV(list_files, ip)
     '''
     # Load the model
-    config = MLP_config.process_config('config/mlp_config.yml')
-    model = MLP_Model(config)
+    config = MLP_config.process_config('../Keras/ModeloMLP/config/mlp_config.yml')
+    model = MLP_Model()
     model.load()
 
     # Obtain Classification
@@ -81,7 +81,7 @@ def main():
 
     # After monitoring delete the data.
     for f in os.listdir(dir):
-        os.remove(os.path.join(dir, f)) # This will fail if it encounters a directory but we should not have any dir.
+        os.remove(os.path.join(dir, f))  # This will fail if it encounters a directory but we should not have any dir.
 
 
 
