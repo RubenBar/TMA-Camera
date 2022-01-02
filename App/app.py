@@ -4,7 +4,7 @@ import sys
 import subprocess
 import argparse
 from ProcData import generateCSV, obtainData
-from itertools import cycle
+from collections import deque
 
 from Keras.ModeloMLP.models.mlp_model import MLP_Model
 from Keras.ModeloMLP.utils import config as MLP_config
@@ -18,42 +18,65 @@ def capture(device_ip, duration, dir, captureName):
         device_ip) + " -w " + dir + str(captureName) + ".pcap", shell=True, stdout=subprocess.PIPE)
     capture.wait()
 
-def monitoring(ip, interval, dir):
-    # Start the capture.
-    #capture(ip, interval, dir, 'test')
 
-    # Process the captured data
-    files = generateCSV.list_files(dir + "/mov/")
-    # data_packets = obtainData.datafile(files[0], ip, 'standard')
-    # Delete all 0 packets (at the end)
-    data_packets = list(filter(lambda num: num != 0, obtainData.datafile(files[0], ip, 'standard')))
+def monitoring(ip, interval, dir):
+    # Initialize variables for the prediction:
+    prediction_list = [-1] * 5
+    # Initializing Circular queue as -1
+    predictions = deque(prediction_list, maxlen=5)
+    previous_prev = -1
+    old_mov_ratio = 0
+    mov_ratio = 0
 
     # Load the model
     model = MLP_Model(None)
     model.load("../Keras/ModeloMLP/models/save/")
 
-    # Obtain Classification
-    samples=[]
-    labels=[] # This should be void or all to 0, does not matter.
-    samples.append(data_packets[:648])
-    prediction = model.predict(samples, labels)
+    while 1:
+        # Start the capture.
+        #capture(ip, interval, dir, 'test')
 
-    prediction_list = [-1] * 5
-    predictions = cycle(prediction_list)
+        # Process the captured data
+        files = generateCSV.list_files(dir + "/mov/")
+        # data_packets = obtainData.datafile(files[0], ip, 'standard')
+        # Delete all 0 packets (at the end)
+        data_packets = list(filter(lambda num: num != 0, obtainData.datafile(files[0], ip, 'standard')))
 
-    #Iterate the list and see if there is more mov or nomov.
-    mov = 0
-    nomov = 0
-    for p in prediction_list:
-        if p != -1:
-            if p == 1:
-                mov += 1
+        # Obtain Classification
+        samples=[]
+        labels=[] # This should be void or all to 0, does not matter.
+        samples.append(data_packets[:648])
+        prediction = model.predict(samples, labels)
+
+        predictions.appendleft(prediction[0])
+        # Iterate the list and see if there is more mov or nomov.
+        mov = 0
+        nomov = 0
+        for p in predictions:
+            if p != -1:
+                if p == 1:
+                    mov += 1
+                else:
+                    nomov += 1
+        if nomov > 0:
+            mov_ratio = mov/nomov
+        else:
+            mov_ratio = mov
+        if mov > nomov:
+            print("There is movement")
+        elif nomov > mov:
+            print("There is no movement")
+        else:
+            if prediction[0] == 1:
+                print("Movement detected")
             else:
-                nomov += 1
-    if mov > nomov:
-        print("There is movement")
-    else:
-        print("No movement detected")
+                print("No movement detected")
+
+        if mov_ratio > old_mov_ratio:
+            print("Movement detection increasing")
+        elif mov_ratio < old_mov_ratio:
+            print("Seems that the movement is stopping")
+        old_mov_ratio = mov_ratio
 
     # TODO: The idea is to have this as a realtime so we would put everything \
     #  In an infinite loop and that's it... \
