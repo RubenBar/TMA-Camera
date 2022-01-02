@@ -22,35 +22,27 @@ def monitoring(ip, interval, dir):
     #capture(ip, interval, dir, 'test')
 
     # Process the captured data
-    # TODO: Here we need to process the data in a way that the model understands it, \
-    #  the first approach was to generate the csv and then read csv etc. However, we think \
-    #  that we can do it avoiding the creation of new files. By doing the processing \
-    #  and storing it directly as the expected format. \
-    #  Would need to take a look at the code to do this. So I Write a commentary :)
+    files = generateCSV.list_files(dir + "/mov/")
+    # data_packets = obtainData.datafile(files[0], ip, 'standard')
+    # Delete all 0 packets (at the end)
+    data_packets = list(filter(lambda num: num != 0, obtainData.datafile(files[0], ip, 'standard')))
 
-    #Autocreate a list with my directory name.
-    '''
-    list_files=[]
-    files = generateCSV.list_files(dir+"/mov/")
-    list_files.extend(files)
-    print("Files in directory: ", list_files)
-    generateCSV.generateCSV(list_files, ip)
-    '''
     # Load the model
-    config = MLP_config.process_config('../Keras/ModeloMLP/config/mlp_config.yml')
-    model = MLP_Model()
-    model.load()
+    model = MLP_Model(None)
+    model.load("../Keras/ModeloMLP/models/save/")
 
     # Obtain Classification
-    # Assuming we have the data in an array of samples.
     samples=[]
     labels=[] # This should be void or all to 0, does not matter.
+    samples.append(data_packets[:648])
     prediction = model.predict(samples, labels)
 
     # Show the results
     # TODO: Here the idea is to show the results. \
     #  We talked about storing the 5 past results in a list and then output based on them. \
     #  I'll leave this until I have the current results etc.
+    predictions=[]
+    predictions.extend(prediction)
 
     # TODO: The idea is to have this as a realtime so we would put everything \
     #  In an infinite loop and that's it... \
@@ -69,9 +61,9 @@ def main():
         return
 
     # Configure environment
-    ip=sys.argv[1]
-    interval=sys.argv[2]
-    dir=sys.argv[3]
+    ip = sys.argv[1]
+    interval = sys.argv[2]
+    dir = sys.argv[3]
 
     if not os.path.exists(dir):
         os.mkdir(dir)
@@ -80,9 +72,9 @@ def main():
     monitoring(ip, interval, dir)
 
     # After monitoring delete the data.
-    for f in os.listdir(dir):
+    '''for f in os.listdir(dir):
         os.remove(os.path.join(dir, f))  # This will fail if it encounters a directory but we should not have any dir.
-
+    '''
 
 
 
