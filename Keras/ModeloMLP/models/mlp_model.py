@@ -7,11 +7,12 @@ from keras.utils.vis_utils import plot_model
 
 class MLP_Model():   
     def __init__(self, config):
-        self.config = config
-        self.build_model()
+        if config is None:
+            pass
+        else:
+            self.config = config
+            self.build_model()
 
-    def __init__(self):
-        pass
 
     def generate_model(self):
         model = Sequential()
@@ -86,7 +87,7 @@ class MLP_Model():
         print("    Modelo guardado correctamente...") 
         
 
-    def load(self):
+    def load(self, path):
         print("    Cargando modelo...") 
-        self.model = load_model('models/save/mlp_modelDef.h5')
+        self.model = load_model(path+'/mlp_model.h5')
         print("    Modelo cargado correctamente...") 
