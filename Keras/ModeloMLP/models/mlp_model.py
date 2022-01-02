@@ -1,6 +1,6 @@
 from keras.models import Sequential
 from keras.layers import Dense, Dropout
-from keras.optimizers import Adam, Adadelta, Adamax, Adagrad
+from tensorflow.keras.optimizers import Adam, Adadelta, Adamax, Adagrad
 from keras.models import load_model
 import numpy as np
 from keras.utils.vis_utils import plot_model

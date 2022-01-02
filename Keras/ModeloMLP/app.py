@@ -5,8 +5,8 @@ import subprocess
 import argparse
 from ProcData import generateCSV, obtainData
 
-from Keras.ModeloMLP.models.mlp_model import MLP_Model
-from Keras.ModeloMLP.utils import config as MLP_config
+from models.mlp_model import MLP_Model
+from utils import config as MLP_config
 
 def load_MLP_config():
     argparser = argparse.ArgumentParser()
@@ -37,7 +37,7 @@ def monitoring(ip, interval, dir):
     generateCSV.generateCSV(list_files, ip)
     '''
     # Load the model
-    config = MLP_config.process_config('Keras/ModeloMLP/config/mlp_config.yml')
+    config = MLP_config.process_config('config/mlp_config.yml')
     model = MLP_Model(config)
     model.load()
 
