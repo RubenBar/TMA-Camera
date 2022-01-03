@@ -3,8 +3,12 @@ import os.path
 import sys
 import subprocess
 import argparse
-from ProcData import generateCSV, obtainData
 from collections import deque
+
+sys.path.insert(1,"/home/kali/Desktop/UNI/TMA-Camera/")
+import ProcData.obtainData as obtainData
+from ProcData import obtainData
+
 
 from Keras.ModeloMLP.models.mlp_model import MLP_Model
 from Keras.ModeloMLP.utils import config as MLP_config
@@ -32,8 +36,10 @@ def monitoring(ip, interval, dir):
 
     # Load the model
     model = MLP_Model(None)
-    model.load("../Keras/ModeloMLP/models/save/")
+    model.load("Keras/ModeloMLP/models/save/")
 
+    print("Exiting...")
+    exit
     while 1:
         # Start the capture.
         filename = capture(ip, interval, dir+"captures", 'test')
@@ -93,7 +99,8 @@ def monitoring(ip, interval, dir):
 #   Load Model.
 #   Predict.
 def main():
-    if len(sys.argv) < 2:
+    '''
+    if len(sys.argv) < 3:
         print("Usage: app.py <IPToCapture> <secondsOfCapture> <pathToStoreCaptures>")
         return
 
@@ -101,7 +108,10 @@ def main():
     ip = sys.argv[1]
     interval = sys.argv[2]
     dir = sys.argv[3]
-
+    '''
+    ip = "192.168.4.5"
+    interval = 5
+    dir = "App/data/captures/"
     if not os.path.exists(dir):
         os.mkdir(dir)
 
