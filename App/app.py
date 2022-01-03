@@ -14,9 +14,11 @@ def load_MLP_config():
 
 
 def capture(device_ip, duration, dir, captureName):
+    filepath = dir+str(captureName)+".pcap"
     capture = subprocess.Popen("sudo timeout " + str(duration) + " tcpdump -i wlan0 -n host " + str(
         device_ip) + " -w " + dir + str(captureName) + ".pcap", shell=True, stdout=subprocess.PIPE)
     capture.wait()
+    return filepath
 
 
 def monitoring(ip, interval, dir):
@@ -34,13 +36,13 @@ def monitoring(ip, interval, dir):
 
     while 1:
         # Start the capture.
-        #capture(ip, interval, dir, 'test')
+        filename = capture(ip, interval, dir+"captures", 'test')
 
         # Process the captured data
-        files = generateCSV.list_files(dir + "/mov/")
+        # files = generateCSV.list_files(dir + "/mov/")
         # data_packets = obtainData.datafile(files[0], ip, 'standard')
         # Delete all 0 packets (at the end)
-        data_packets = list(filter(lambda num: num != 0, obtainData.datafile(files[0], ip, 'standard')))
+        data_packets = list(filter(lambda num: num != 0, obtainData.datafile(filename, ip, 'standard')))
 
         # Obtain Classification
         samples=[]
@@ -78,6 +80,7 @@ def monitoring(ip, interval, dir):
             print("Seems that the movement is stopping")
         old_mov_ratio = mov_ratio
 
+        os.remove(filename)
     # TODO: The idea is to have this as a realtime so we would put everything \
     #  In an infinite loop and that's it... \
     #  In a loop the model load is done only ONCE
