@@ -38,8 +38,6 @@ def monitoring(ip, interval, dir):
     model = MLP_Model(None)
     model.load("Keras/ModeloMLP/models/save/")
 
-    print("Exiting...")
-    exit
     while 1:
         # Start the capture.
         filename = capture(ip, interval, dir+"captures", 'test')
