@@ -7,6 +7,7 @@ from ProcData import generateCSV, obtainData
 from collections import deque
 
 from Keras.ModeloMLP.models.mlp_model import MLP_Model
+from Keras.ModeloCNN.models.cnn_model import CNN_Model
 from Keras.ModeloMLP.utils import config as MLP_config
 
 def load_MLP_config():
@@ -31,8 +32,8 @@ def monitoring(ip, interval, dir):
     mov_ratio = 0
 
     # Load the model
-    model = MLP_Model(None)
-    model.load("../Keras/ModeloMLP/models/save/")
+    model = CNN_Model(None)
+    model.load("../Keras/ModeloCNN/models/save/")
 
     while 1:
         # Start the capture.

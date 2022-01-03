@@ -1,6 +1,6 @@
 from keras.models import Sequential
 from keras.layers import Conv1D, Dense, Dropout, Flatten, MaxPooling1D
-from keras.optimizers import Adam
+from tensorflow.keras.optimizers import Adam
 from keras.models import load_model
 import numpy as np
 from keras.utils.vis_utils import plot_model
@@ -8,8 +8,11 @@ from keras.utils.vis_utils import plot_model
 
 class CNN_Model():   
     def __init__(self, config):
-        self.config = config
-        self.build_model()
+        if config is None:
+            pass
+        else:
+            self.config = config
+            self.build_model()
         
     def generate_model(self):
         model = Sequential()
@@ -86,7 +89,7 @@ class CNN_Model():
         print("    Modelo guardado correctamente...")   
         
         
-    def load(self):
+    def load(self, path):
         print("    Cargando modelo...") 
-        self.model = load_model('models/save/cnn_model.h5')
+        self.model = load_model(path + 'cnn_model.h5')
         print("    Modelo cargado correctamente...")  
