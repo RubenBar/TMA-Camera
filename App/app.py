@@ -6,6 +6,8 @@ import argparse
 from ProcData import generateCSV, obtainData
 from collections import deque
 
+sys.path.insert(1, os.path.abspath("TMA-Camera/"))
+
 from Keras.ModeloMLP.models.mlp_model import MLP_Model
 from Keras.ModeloCNN.models.cnn_model import CNN_Model
 from Keras.ModeloMLP.utils import config as MLP_config
