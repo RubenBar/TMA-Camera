@@ -14,7 +14,7 @@ model:
         loss_function: "categorical_crossentropy"
     trainer:
         val_split: 0.3        
-        batch_size: 150
+        batch_size: 100
         epochs: 10
         verbose: 1
 dataset:
