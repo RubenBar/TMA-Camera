@@ -17,7 +17,7 @@ class Data_Loader():
         
         
     def get_samples(self):
-        samples = self.data.iloc[:, 2:450].values.tolist()        
+        samples = self.data.iloc[:, 2:700].values.tolist()        
         samples = np.array(samples)         
         return samples        
 
