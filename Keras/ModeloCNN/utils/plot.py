@@ -12,7 +12,7 @@ def plot_results(queries, test_labels, rounded_predictions):
     print("    Generating plots...")
     test_labels = np.argmax(test_labels, axis=-1)
     cm = confusion_matrix(y_true=test_labels, y_pred=rounded_predictions)
-    cm_plot_labels = ['Movement','No_movement']
+    cm_plot_labels = ['No_movement','Movement']
     plot_confusion_matrix(cm=cm, classes=cm_plot_labels)
 
 
