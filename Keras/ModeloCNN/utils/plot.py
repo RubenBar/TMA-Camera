@@ -9,10 +9,10 @@ import itertools
 import matplotlib.pyplot as plt
 
 def plot_results(queries, test_labels, rounded_predictions):
-    print("    Generando graficos...") 
+    print("    Generating plots...") 
     test_labels = np.argmax(test_labels, axis=-1)
     cm = confusion_matrix(y_true=test_labels, y_pred=rounded_predictions)    
-    cm_plot_labels = ['Movimiento','No_movimiento']
+    cm_plot_labels = ['Movement','No_movement']
     plot_confusion_matrix(cm=cm, classes=cm_plot_labels)
                    
     
@@ -49,19 +49,19 @@ def plot_model_history(model_history):
     # summarize history for accuracy
     axs[0].plot(range(1,len(model_history.history['accuracy'])+1),model_history.history['accuracy'])
     axs[0].plot(range(1,len(model_history.history['val_accuracy'])+1),model_history.history['val_accuracy'])
-    axs[0].set_title('Porcentaje de Aciertos')
-    axs[0].set_ylabel('Precisión')
+    axs[0].set_title('Success rate')
+    axs[0].set_ylabel('Accuracy')
     axs[0].set_xlabel('Epoch')
     axs[0].set_xticks(np.arange(1,len(model_history.history['accuracy'])+1),len(model_history.history['accuracy'])/10)
-    axs[0].legend(['cj. entrenamiento', 'cj. validación'], loc='best')
+    axs[0].legend(['training set', 'validation set'], loc='best')
     
     # summarize history for loss
     axs[1].plot(range(1,len(model_history.history['loss'])+1),model_history.history['loss'])
     axs[1].plot(range(1,len(model_history.history['val_loss'])+1),model_history.history['val_loss'])
-    axs[1].set_title('Función de Pérdida')
+    axs[1].set_title('Loss function')
     axs[1].set_ylabel('Loss')
     axs[1].set_xlabel('Epoch')
     axs[1].set_xticks(np.arange(1,len(model_history.history['loss'])+1),len(model_history.history['loss'])/10)
-    axs[1].legend(['cj. entrenamiento', 'cj. validación'], loc='best')
+    axs[1].legend(['training set', 'validation set'], loc='best')
     plt.show()
 
