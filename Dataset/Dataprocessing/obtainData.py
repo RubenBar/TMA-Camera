@@ -10,16 +10,17 @@ def pcap_converter(pcap_path, echo_ip):
     pcap_name = pcap_file.name[0:-5]
     p_list = rdpcap(pcap_path)
 
-    #En este apartado indicamos los "features" que vamos a utilizar. En este caso tenemos tres:
-    ####time -> tiempo entre paquete y paquete
-    ####size -> tamaño de la trama IP
-    ####direction -> la direccion del paquete (saliente = 1 // entrante = -1)  
+    # In this section we indicate the "features" that we are going to use. In this case we have 3 features:
+    ####time -> Time between packets
+    ####size -> IP frame size
+    ####direction -> The address of the packet (outgoing = 1 // incoming = -1)
     echo_df = pd.DataFrame(columns=['time', 'size', 'direction'])
 
     p_list.reverse()
     echo_packets = []
     for p in p_list:
-	    #En este apartado eliminamos los paquetes que no queremos mostrar en el CSV -> en este caso, todos los paquetes TCP.
+        # In this section we eliminate those packets that we do not want to show in the CSV file
+        # In this case, all TCP packets
         try:
             p[IP].src
             p[UDP]

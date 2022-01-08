@@ -5,7 +5,7 @@ from scapy.all import *
 from obtainData import datafile
 
 def list_dirs(path):
-    #Lista todos los directorios del directorio main "path"
+    # List all directories in the main directory "path"
     list_dirs = os.listdir(path)
     list_dirs.sort()
     list_d = []
@@ -16,15 +16,15 @@ def list_dirs(path):
 
 
 def list_files(subdir_path):
-    #Lista todos los ficheros del directorio "subdir_path"
+    # List all files in the directory "subdir_path"
     list_files = []
     pcap_files = os.listdir(subdir_path)
     list_files.extend(map(lambda f: os.path.join(subdir_path, f), pcap_files))	
     return list_files
-    
-   
+
+
 def dataframe_columns(d_f):
-    #Obtener las columnas 
+    # Get columns
     col = []
     col.append('name')
     col.append('label')
@@ -33,39 +33,39 @@ def dataframe_columns(d_f):
         col.append('feat#'+str(ind+1))
 	
     return col
-        
-        
+
+
 def getFilename(f):
-    #Obtener el nombre del fichero 
+    # Get filename
     file_name = os.path.basename(f)
     return file_name.split('.',1)[0]
-      
-      
+
+
 def generateCSV(list_files, camera_ip):
-    #Extraer caracteristicas y generar fichero CSV 
+    # Extract characteristics and generate CSV file
     csv_path = 'csv/'
-    
-    #COLUMNAS
+
+    # COLUMNS
     d_f = datafile(list_files[0], camera_ip, 'standard') 
     df_cols = dataframe_columns(d_f)
     df_csv = pd.DataFrame(columns=df_cols)
 
-    #FILAS   
+    # ROWS 
     count = 1
     for f in list_files:
-        #Iterar por todas las capturas de trafico
+        # Iterate for all traffic captures
         print("Num: ", count,"/",len(list_files))
         try:	
-            #Obtener los datos -> llamada a obtainData
+            #Get the data -> Calling to 'obtainData'
             d_f = datafile(f, camera_ip, 'standard') 
                     
-            label = 1 #0: No-Movimiento // 1: Movimiento        
+            label = 1 #0: No-Movement // 1: Movement        
             d_f.insert(0, label)
             
             file_name = getFilename(f)
             d_f.insert(0, file_name)
             try:
-                #Insertar los datos en el CSV
+                # Insert the data in CSV file
                 df_csv.loc[-1] = d_f
                 df_csv.index = df_csv.index + 1
                 count = count + 1 
@@ -85,27 +85,27 @@ def main():
 	print('######################################################\n')
     
 	'''
-	~Argumentos de entrada~
-	#main_path: path con las capturas de trafico  
-	#camera_ip: direccion IP dispositivo
+	~Input arguments~
+	#main_path: path with traffic captures
+	#camera_ip: device IP address
 	'''
-    
+
 	main_path = sys.argv[1]
 	camera_ip = sys.argv[2]
-	
-	print('\nListando directorios...')
-	l_q = list_dirs(main_path)
-	print('Lista de directorios: ', l_q)
 
-	print('\nListando ficheros...')
+	print('\Listing directories...')
+	l_q = list_dirs(main_path)
+	print('Directory List: ', l_q)
+
+	print('\nListing files...')
 	l_f = []
 	for q in l_q:
 		l_f.extend(list_files(q))
-	print('Lista de ficheros: ', l_f)
-		
-	print('\nGenerando CSV...')
+	print('File List: ', l_f)
+
+	print('\nGenerating CSV...')
 	generateCSV(l_f, camera_ip)
-	print('Fichero CSV generado.')
+	print('Generated CSV file.')
 
 
 if __name__ == "__main__":

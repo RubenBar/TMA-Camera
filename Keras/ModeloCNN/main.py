@@ -7,87 +7,87 @@ from utils.plot import plot_results, plot_model_history
 
 
 def get_config():
-    #  Obtencion de los argumentos de entrada
-    print('    Leyendo fichero de configuracion...')
-    argparser = argparse.ArgumentParser()    
-    argparser.add_argument('config', help='Configuracion del modelo')    
+    # Getting the input arguments
+    print('    Reading configuration file...')
+    argparser = argparse.ArgumentParser()
+    argparser.add_argument('config', help='Model setup')
     parser = argparser.parse_args()
-    
-    #Obtencion de la configuracion
+
+    # Getting the settings
     config = process_config(parser.config)
     return config
 
-          
+
 def get_data(config):
-    #  Obtencion de los datos del Dataset
-    print('    Seleccionando los datos a utilizar...')
+    # Getting the data from the Dataset
+    print('    Selecting the data to use...')
     if(config.dataset.loader.parameters == 'all'):
         dl = Data_Loader(config)
-        
-    print('    Procesando los datos...')        
+
+    print('    Processing the data...')
     samples = dl.get_samples()
     labels, numLabels = dl.get_labels()
     queries, queries_num = dl.get_queries()
     train_samples, test_samples, train_labels, test_labels = train_test_split(samples, labels, test_size=0.2, shuffle=True)
-    
+
     train_samples, train_labels = dl.process_data(train_samples, train_labels, config.model.type)
     test_samples, test_labels = dl.process_data(test_samples, test_labels, config.model.type)
-    
+
     config.model.generator.input_dim = len(train_samples[0])
     config.model.generator.output_dim = numLabels 
-    
+
     return train_samples, train_labels, test_samples, test_labels, numLabels
 
 
 def get_model(config):
-    print('    Seleccionando la estructura del modelo a utilizar...')
+    print('    Selecting the structure of the model to use...')
     if config.model.type == 'cnn':
-        print('    Modelo seleccionado: CNN')
+        print('    Selected Model: CNN')
         model = CNN_Model(config)
         return model
 
     else:
-        raise ValueError('Estructura no conocida')
+        raise ValueError('Unknown structure')
 
 
-def main(): 
-   
-    print('\n##################################') 
-    print('##                              ##')   
-    print('##       PROGRAMA PRINCIPAL     ##') 
-    print('##                              ##') 
-    print('##################################') 
-  
-    print('\n[1/5] Obteniendo ARGUMENTOS de ENTRADA...')
+def main():
+
+    print('\n##################################')
+    print('##                              ##')
+    print('##         MAIN PROGRAM         ##')
+    print('##                              ##')
+    print('##################################')
+
+    print('\n[1/5] Getting INPUT ARGUMENTS...')
     config = get_config()
-    print('Proceso realizado correctamente')
-    
-    
-    print('\n[2/5] Obteniendo y preparando los DATOS...')
+    print('Process done correctly')
+
+
+    print('\n[2/5] Obtaining and preparing the DATOS...')
     t_samples, t_labels, test_samples, test_labels, numLabels = get_data(config)
-    print('Proceso realizado correctamente')  
+    print('Process done correctly')
 
 
-    print('\n[3/5] Preparando el MODELO...')
+    print('\n[3/5] Preparating the MODEL...')
     model = get_model(config)
     model.summary()
     model.plot_model()
-    print('Proceso realizado correctamente ')
-    
-    
-    print('\n[4/5] Creando el ENTRENADOR...')
+    print('Process done correctly')
+
+
+    print('\n[4/5] Training the MODEL...')
     model_hist = model.train(t_samples, t_labels)
     model.evaluate(t_samples, t_labels)
     #model.save()
-    print('Proceso realizado correctamente ')
-    
-        
-    print('\n[5/5] Preparando RESULTADOS...') 
+    print('Process done correctly')
+
+
+    print('\n[5/5] Preparating RESULTS...')
     rounded_predictions = model.predict(test_samples, test_labels)
     plot_results(numLabels, test_labels, rounded_predictions)
     plot_model_history(model_hist)
-    print('Proceso realizado correctamente ')
-     
+    print('Process done correctly')
+
 
 if __name__ == "__main__":
         main()
