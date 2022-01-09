@@ -117,7 +117,6 @@ def monitoring(ip, interval, dir):
 #   Load Model.
 #   Predict.
 def main():
-    '''
     if len(sys.argv) < 3:
         print("Usage: app.py <IPToCapture> <secondsOfCapture> <pathToStoreCaptures>")
         return
@@ -127,9 +126,11 @@ def main():
     interval = sys.argv[2]
     dir = sys.argv[3]
     '''
+    # Hardcoded values to test at the start.
     ip = "192.168.4.5"
     interval = 10
     dir = "App/data/captures/"
+    '''
     if not os.path.exists(dir):
         os.mkdir(dir)
 
