@@ -7,12 +7,14 @@ This project consists of 2 parts:
 ```pip install -r requirements.txt```
 
 ## Execute Real Time Application
-```python3 App/app.py <IP> <IntervalOfCapture> <dirToStoreCaptures>```
-i.e ```python3 App/app.py 192.168.4.5 10 App/data/captures/```
+```
+python3 App/app.py <IP> <IntervalOfCapture> <dirToStoreCaptures>
+i.e python3 App/app.py 192.168.4.5 10 App/data/captures/
+```
 
-We need to download the model from this google drive link: https://drive.google.com/file/d/10i2K28URexs3HI7rwC8JLLDzXh06ULJg/view?usp=sharing And then move it to TMA-Camera\Keras\ModeloCNN\models\save
+We need to download the model from this google drive link: https://drive.google.com/file/d/10i2K28URexs3HI7rwC8JLLDzXh06ULJg/view?usp=sharing And then move it to ```TMA-Camera\Keras\ModeloCNN\models\save```
 
-We need to do this because GitHub does not allow us to upload files with certain size
+We need to do this because GitHub does not allow us to upload files that exceed certain size
 
 ## How to capture data?
 ```
