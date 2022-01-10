@@ -11,7 +11,9 @@ We also used this directory to store the files captured by the app but any direc
 ### Dataset Folder:
 Contains the code necessary to generate the dataset.
 ### Keras Folder:
-Contains the code of the Deep Learning models that we have implemented [MLP Model and CNN Model] 
+Contains the code of the Deep Learning models that we have implemented.
+<br /> -*ModeloMLP/: multilayer perceptron.
+<br /> -*ModeloCNN/: convolutional neural network.
 
 ## Install requirements
 ```pip install -r requirements.txt```
