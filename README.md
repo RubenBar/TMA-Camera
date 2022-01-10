@@ -8,7 +8,10 @@ The repository is organized with a folder for every component.
 ### App Folder:
 Contains the code of the application.
 We also used this directory to store the files captured by the app but any directory can be used.
-
+### Dataset Folder:
+Contains the code necessary to generate the dataset.
+### Keras Folder:
+Contains the code of the Deep Learning models that we have implemented [MLP Model and CNN Model] 
 
 ## Install requirements
 ```pip install -r requirements.txt```
